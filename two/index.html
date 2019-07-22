@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Notebook</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="notebook">
+    <aside class="side-bar">
+      <div class="toolbar">
+        <button v-bind:title="addButtonTitle" @click="addNote">
+          <i class="material-icons">add</i> Add note
+        </button>
+      </div>
+      <div class="notes">
+        <div class="note" :class="{selected: note === selectedNote}" @click="selectNote(note)" v-for="note of sortedNotes">
+          <i class="icon material-icons" v-if="note.favorite">star</i>
+          {{ note.title }}
+        </div>
+      </div>
+    </aside>
+
+    <template v-if="selectedNote">
+      <section class="main">
+        <div class="toolbar">
+          <input type="text" placeholder="Note title" v-model="selectedNote.title" />
+          <button @click="favoriteNote" title="Favorite note"><i class="material-icons">{{ selectedNote.favorite ? 'star' : 'star_border' }}</i></button>
+          <button @click="removeNote" title="Remove note"><i class="material-icons">delete</i></button>
+        </div>
+        <textarea v-model="selectedNote.content"></textarea>
+        <div class="toolbar status-bar">
+          <span class="date">
+            <span class="label">Created</span>
+            <span class="value">{{ selectedNote.createdAt | date }}</span>
+          </span>
+          <span class="lines">
+            <span class="label">Lines</span>
+            <span class="value">{{ linesCount }}</span>
+          </span>
+          <span class="words">
+            <span class="label">Words</span>
+            <span class="value">{{ wordsCount }}</span>
+          </span>
+          <span class="characters">
+            <span class="label">Characters</span>
+            <span class="value">{{ characterCount }}</span>
+          </span>
+        </div>
+      </section>
+      <aside class="preview" v-html="notePreview"></aside>
+    </template>
+  </div>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/marked"></script>
+  <script src="https://unpkg.com/moment"></script>
+  <script src="script.js"></script>
+</body>
+</html>
